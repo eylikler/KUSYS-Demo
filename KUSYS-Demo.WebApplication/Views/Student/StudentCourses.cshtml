@@ -1,0 +1,84 @@
+﻿@model IEnumerable<KUSYS_Demo.WebApplication.DTOs.Students.StudentCourseDto>
+@{
+    ViewData["Title"] = "Seçilen Dersler";
+    
+    int? studentId = 0;
+
+    if (ViewData["StudentId"] != null)
+    {
+        studentId = int.Parse(ViewData["StudentId"].ToString());
+    }
+}
+
+<p>
+    <a class="btn btn-primary btn-md" tabindex="-1" role="button" asp-action="CourseMatching" asp-route-id="@studentId">Ders Seçimi</a>
+    <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+</p>
+
+@if (Model.Count() > 0)
+{
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.courseId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.course.courseName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @Html.AntiForgeryToken()
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.courseId
+                    </td>
+                    <td>
+                        @item.course.courseName
+                    </td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                            <button id="deleteButton_@item.studentCourseId" class="btn btn-danger btn-md" tabindex="-1" data-studentcourseid="@item.studentCourseId">Sil</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h4>Henüz ders seçimi yapılmadı.</h4>
+}
+
+
+<script>
+
+    $(document).ready(function () {
+        $('button[id^="deleteButton_"]').click(function () {
+            var verificationToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+            var studentcourseid = $(this).data('studentcourseid');
+
+            if (confirm("Eşleştirilen dersi kaldırmak istediğinize emin misiniz?")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Student/DeleteMatchedCourse/' + studentcourseid,
+                    dataType: 'json',
+                    headers: { 'X-XSRF-TOKEN': verificationToken },
+                    success: function (result) {
+                        alert(result.message);
+                        location.reload();
+                    },
+                    error: function (result) {
+                        alert("Hata: " + result.message);
+                    }
+                });
+            }
+        });
+    });
+</script>

@@ -1,0 +1,30 @@
+﻿<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .logo-row {
+        display: flex;
+        justify-content: center; /* Yatay ortala */
+        align-items: center; /* Dikey ortala */
+        height: 100%; /* Sayfayı dolduracak yükseklik */
+    }
+
+    .logo-contain {
+        text-align: center; /* İçeriği yatayda ortala */
+    }
+
+    .logo-bg {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+</style>
+
+<div class="row logo-row">
+    <div class="col-12 logo-contain">
+        <img class="logo-bg" src="~/assets/brand/koc_universitesi_logo.png" />
+    </div>
+</div>

@@ -1,0 +1,76 @@
+﻿@model IEnumerable<KUSYS_Demo.WebApplication.DTOs.Courses.CourseDto>
+@{
+    ViewData["Title"] = "Ders Seçimi";
+    
+    int? studentId = 0;
+
+    if (ViewData["StudentId"] != null)
+    {
+        studentId = int.Parse(ViewData["StudentId"].ToString());
+    }
+}
+
+<p>
+    <a asp-action="StudentCourses" asp-route-id="@studentId" class="btn btn-secondary">Geri Dön</a>
+</p>
+
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.courseId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.courseName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @Html.AntiForgeryToken()
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.courseId
+                </td>
+                <td>
+                    @item.courseName
+                </td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                        <button id="confirmButton_@item.courseId" class="btn btn-success btn-md" tabindex="-1" data-courseid="@item.courseId" data-studentid="@studentId">Dersi Seç</button>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('button[id^="confirmButton_"]').click(function () {
+            var verificationToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+            var studentId = $(this).data('studentid');
+            var courseId = $(this).data('courseid');
+
+            if (confirm("Ders seçilecek onaylıyor musunuz?")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Student/ConfirmCourseMatching/',
+                    dataType: 'json',
+                    headers: { 'X-XSRF-TOKEN': verificationToken },
+                    data: { studentId: studentId, courseId: courseId },
+                    success: function (result) {
+                        alert(result.message);
+                        location.reload();
+                    },
+                    error: function (result) {
+                        alert("Hata: " + result.message);
+                    }
+                });
+            }
+        });
+    });
+</script>

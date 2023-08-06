@@ -1,0 +1,10 @@
+﻿@model KUSYS_Demo.WebApplication.DTOs.Students.StudentDto
+@{
+    ViewData["Title"] = "Öğrenci Detayları";
+    Layout = null;
+}
+
+<p>Öğrenci Adı: @Model.firstName</p>
+<p>Öğrenci Soyadı: @Model.lastName</p>
+<p>TCKN: @Model.identityNumber</p>
+<p>Doğum Tarihi: @Model.birthDate.ToString("dd.MM.yyyy")</p>

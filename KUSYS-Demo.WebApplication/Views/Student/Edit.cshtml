@@ -1,0 +1,37 @@
+﻿@model KUSYS_Demo.WebApplication.DTOs.Students.StudentDto
+
+@{
+    ViewData["Title"] = "Öğrenci Düzenle";
+}
+
+<form method="post">
+    <input type="hidden" asp-for="studentId" />
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="firstName" class="form-label"></label>
+            <input asp-for="firstName" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="lastName" class="form-label"></label>
+            <input asp-for="lastName" class="form-control" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="identityNumber" class="form-label"></label>
+            <input asp-for="identityNumber" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="birthDate" class="form-label"></label>
+            <input asp-for="birthDate" type="date" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+            <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+        </div>
+    </div>
+    @Html.AntiForgeryToken()
+</form>

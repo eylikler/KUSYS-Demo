@@ -1,0 +1,139 @@
+﻿@using KUSYS_Demo.WebApplication.DTOs.Users;
+@model IEnumerable<KUSYS_Demo.WebApplication.DTOs.Students.StudentDto>
+@{
+    ViewData["Title"] = "Öğrenciler";
+
+    bool isAdmin = false;
+
+    if (ViewData["IsAdmin"] != null)
+    {
+        isAdmin = (bool)ViewData["IsAdmin"];
+    }
+}
+
+@if (isAdmin)
+{
+    <p>
+        <a class="btn btn-primary btn-md" tabindex="-1" role="button" asp-action="Create">Öğrenci Ekle</a>
+    </p>
+}
+
+
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.firstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.lastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.identityNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.birthDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @Html.AntiForgeryToken()
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.firstName
+                </td>
+                <td>
+                    @item.lastName
+                </td>
+                <td>
+                    @item.identityNumber
+                </td>
+                <td>
+                    @item.birthDate.ToString("dd.MM.yyyy")
+                </td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                        
+                        <a id="detailsButton_@item.studentId" class="btn btn-warning btn-md" tabindex="-1" role="button" data-studentid="@item.studentId">Detaylar</a>
+                        @if (isAdmin)
+                        {
+                            <a class="btn btn-info btn-md" tabindex="-1" role="button" asp-action="Edit" asp-route-id="@item.studentId">Düzenle</a>
+                            <button id="deleteButton_@item.studentId" class="btn btn-danger btn-md" tabindex="-1" data-studentid="@item.studentId">Sil</button>
+                        }
+                        <a class="btn btn-dark btn-md" tabindex="-1" role="button" asp-action="StudentCourses" asp-route-id="@item.studentId">Dersler</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $("a[id^='detailsButton_']").on("click", function () {
+            var studentId = $(this).data("studentid");
+
+            $.ajax({
+                url: "/Student/Details/" + studentId,
+                method: "GET",
+                success: function (data) {
+                    showModal(data);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        function showModal(content) {
+            var modal = `
+                                                <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="detailsModalLabel">Öğrenci Detayları</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                ${content}
+                                                            </div>
+                                                                <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Kapat</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                        `;
+
+            $("body").append(modal);
+            $("#detailsModal").modal("show");
+        }
+    });
+
+    $(document).ready(function () {
+        $('button[id^="deleteButton_"]').click(function () {
+            var verificationToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+            var studentId = $(this).data('studentid');
+            if (confirm("Bu öğrenciyi silmek istediğinize emin misiniz?")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Student/Delete/' + studentId,
+                    dataType: 'json',
+                    headers: { 'X-XSRF-TOKEN': verificationToken },
+                    success: function (result) {
+                        alert(result.message);
+                        location.reload();
+                    },
+                    error: function (result) {
+                        alert("Hata: " + result.message);
+                    }
+                });
+            }
+        });
+    });
+</script>

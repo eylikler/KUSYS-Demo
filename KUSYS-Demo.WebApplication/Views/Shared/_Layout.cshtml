@@ -1,0 +1,160 @@
+﻿@using KUSYS_Demo.WebApplication.DTOs.Users;
+@{
+    var controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    var actionName = ViewContext.RouteData.Values["action"].ToString();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KUSYS Demo</title>
+
+    <!-- jQuery -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="apple-touch-icon" sizes="57x57" href="~/assets/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="~/assets/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="~/assets/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="~/assets/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="~/assets/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="~/assets/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="~/assets/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="~/assets/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/assets/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/assets/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="~/assets/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="~/assets/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="~/assets/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Vendors styles-->
+    <link rel="stylesheet" href="~/vendors/simplebar/css/simplebar.css">
+    <link rel="stylesheet" href="~/css/vendors/simplebar.css">
+    <!-- Main styles for this application-->
+    <link href="~/css/style.css" rel="stylesheet">
+    <link href="~/css/examples.css" rel="stylesheet">
+    @*<link href="~/vendors/@@coreui/chartjs/css/coreui-chartjs.css" rel="stylesheet">*@
+</head>
+<body>
+    <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
+        <div class="sidebar-brand d-none d-md-flex">
+            <img class="sidebar-brand-full" src="~/assets/brand/koc_universitesi_logo.png" width="140" height="46" alt="Koç Üniversitesi Logo" />
+            <img class="sidebar-brand-narrow" src="~/assets/brand/koc_universitesi_logo.png" width="46" height="46" alt="Koç Üniversitesi Logo" />
+        </div>
+        <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
+                    <svg class="nav-icon">
+                        <use xlink:href="/vendors/@@coreui/icons/svg/free.svg#cil-home"></use>
+                    </svg> Ana Sayfa
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Student" asp-action="Index">
+                    <svg class="nav-icon">
+                        <use xlink:href="/vendors/@@coreui/icons/svg/free.svg#cil-people"></use>
+                    </svg> Öğrenci ve Ders İşlemleri
+                </a>
+            </li>
+        </ul>
+        <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
+    </div>
+    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+        <header class="header header-sticky mb-4">
+            <div class="container-fluid">
+                <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
+                    <svg class="icon icon-lg">
+                        <use xlink:href="/vendors/@@coreui/icons/svg/free.svg#cil-menu"></use>
+                    </svg>
+                </button><a class="header-brand d-md-none" href="#">
+                    <img class="sidebar-brand-full" src="~/assets/brand/koc_universitesi_logo.png" width="130" height="46" alt="Koç Üniversitesi Logo" />
+                </a>
+                <ul class="header-nav ms-3">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <div class="avatar avatar-md"><img class="avatar-img" src="/assets/img/avatars/2.jpg" alt="user@email.com"></div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end pt-0">
+
+                            <div class="dropdown-header bg-light py-2">
+                                <div class="fw-semibold">Settings</div>
+                            </div>
+                            <a class="dropdown-item" href="#">
+                                <svg class="icon me-2">
+                                    <use xlink:href="/vendors/@@coreui/icons/svg/free.svg#cil-user"></use>
+                                </svg> Profil
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <svg class="icon me-2">
+                                    <use xlink:href="/vendors/@@coreui/icons/svg/free.svg#cil-settings"></use>
+                                </svg> Ayarlar
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-controller="Account" asp-action="Logoff">
+                                <svg class="icon me-2">
+                                    <use xlink:href="/vendors/@@coreui/icons/svg/free.svg#cil-account-logout"></use>
+                                </svg> Oturumu Kapat
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            @if (controllerName != "Dashboard" && actionName != "Index")
+            {
+                <div class="header-divider"></div>
+                <div class="container-fluid">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb my-0 ms-2">
+                            <li class="breadcrumb-item active"><span>@ViewData["Title"]</span></li>
+                        </ol>
+                    </nav>
+                </div>
+            }
+
+        </header>
+
+        <div class="body flex-grow-1 px-3">
+            <div class="container-lg">
+                @RenderBody()
+
+                @await Html.PartialAsync("_ToastMessage")
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div>
+                &copy; 2023 - KUSYS
+            </div>
+        </footer>
+    </div>
+
+    <script src="~/vendors/@@coreui/coreui/js/coreui.bundle.min.js"></script>
+    <script src="~/vendors/simplebar/js/simplebar.min.js"></script>
+
+    @*<script src="~/vendors/chart.js/js/chart.min.js"></script>*@
+    <script src="~/vendors/@@coreui/chartjs/js/coreui-chartjs.js"></script>
+    <script src="~/vendors/@@coreui/utils/js/coreui-utils.js"></script>
+    @*<script src="~/js/main.js"></script>*@
+    <script src="~/js/toasts.js"></script>
+    @*@await RenderSectionAsync("Scripts", required: false)*@
+</body>
+</html>
+
+@*<script>
+    var toastMessageElement = document.querySelector(".toast");
+    var toast = new coreui.Toast(toastMessageElement);
+    toast.show();
+</script>*@
